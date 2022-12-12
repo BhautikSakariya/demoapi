@@ -72,11 +72,11 @@ class _loginpageState extends State<loginpage> {
 
                             Map data = map['data'];
 
-                            String id = data['id'];
-                            String name = data['name'];
-                            String email = data['email'];
-                            String contact = data['contact'];
-                            String password = data['password'];
+                            String id        = data['id'];
+                            String name      = data['name'];
+                            String email     = data['email'];
+                            String contact   = data['contact'];
+                            String password  = data['password'];
                             String imagepath = data['imagepath'];
 
 

@@ -27,14 +27,17 @@ class _ragisterState extends State<ragister> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: SingleChildScrollView(
         child: Column(children: [
           Container(
               height: 60,
               width: double.infinity,
               padding: EdgeInsets.all(8),
-              child: Center(child: Text("Ragister",style: TextStyle(fontSize: 30,color: Colors.black),))),
+              child: Center(
+                  child: Text(
+                "Ragister",
+                style: TextStyle(fontSize: 30, color: Colors.black),
+              ))),
           Container(
             width: double.infinity,
             height: 200,
@@ -174,75 +177,91 @@ class _ragisterState extends State<ragister> {
               String imagename =
                   "$name1${dt.year}${dt.month}${dt.day}${dt.hour}${dt.minute}${dt.second}.jpg";
 
-              var formData = FormData.fromMap({
-                'name': name1,
-                'email': email1,
-                'password': password1,
-                'contact': contact,
-                'file': await MultipartFile.fromFile(imagepath!,
-                    filename: imagename),
-              });
-              var response = await Dio().post(api, data: formData);
-              Navigator.pop(context);
-              print("Response: ${response.statusCode}");
-              if (response.statusCode == 200) {
-                print("Response: ${response.data}");
-                Map map = jsonDecode(response.data);
-                int result = map['result'];
-                if (result == 0) {
+              if (imagepath != null) {
+                var formData = FormData.fromMap({
+                  'name': name1,
+                  'email': email1,
+                  'password': password1,
+                  'contact': contact,
+                  'file': await MultipartFile.fromFile(imagepath!,
+                      filename: imagename),
+                });
+                var response = await Dio().post(api, data: formData);
+                Navigator.pop(context);
+                print("Response: ${response.statusCode}");
+                if (response.statusCode == 200) {
+                  print("Response: ${response.data}");
+                  Map map = jsonDecode(response.data);
+                  int result = map['result'];
+                  if (result == 0) {
+                    setState(() {
+                      Fluttertoast.showToast(
+                          msg: "Try Again!",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black87,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    });
+                  } else if (result == 1) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(
+                      builder: (context) {
+                        return loginpage();
+                      },
+                    ));
+                  } else if (result == 2) {
+                    setState(() {
+                      Fluttertoast.showToast(
+                          msg: "Email or Contact is Already Exist",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black87,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                      contacterror = true;
+                    });
+                  } else if (result == 3) {
+                    setState(() {
+                      Fluttertoast.showToast(
+                          msg: "Email or Contact is Already Exist",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black87,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                      emailerror = true;
+                    });
+                  }
+                } else {
                   setState(() {
                     Fluttertoast.showToast(
                         msg: "Try Again!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
                         timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
+                        backgroundColor: Colors.black87,
                         textColor: Colors.white,
                         fontSize: 16.0);
-                  });
-                } else if (result == 1) {
-                  Navigator.pushReplacement(context, MaterialPageRoute(
-                    builder: (context) {
-                      return loginpage();
-                    },
-                  ));
-                } else if (result == 2) {
-                  setState(() {
-                    Fluttertoast.showToast(
-                        msg: "Email or Contact is Already Exist",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                    contacterror = true;
-                  });
-                } else if (result == 3) {
-                  setState(() {
-                    Fluttertoast.showToast(
-                        msg: "Email or Contact is Already Exist",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                    emailerror = true;
                   });
                 }
-              } else {
-                setState(() {
-                  Fluttertoast.showToast(
-                      msg: "Try Again!",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                });
               }
+              else
+                {
+                  setState(() {
+                    Fluttertoast.showToast(
+                        msg: "Please Select Image",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black87,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                  });
+                  Navigator.pop(context);
+                }
             },
             child: Container(
               padding: EdgeInsets.all(10),
